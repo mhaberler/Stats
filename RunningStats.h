@@ -1,5 +1,8 @@
 #ifndef RUNNINGSTATS_H
 #define RUNNINGSTATS_H
+
+#include <stdint.h>
+
 // from: https://www.johndcook.com/blog/skewness_kurtosis/
 
 typedef enum {
