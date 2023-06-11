@@ -6,7 +6,7 @@
 // 90% 1.645
 // 95% 1.960
 // 99% 2.576
-static double z_values[] = {1.645, 1.960, 2.576};
+static float z_values[] = {1.645, 1.960, 2.576};
 
 RunningStats::RunningStats() { Clear(); }
 
@@ -15,10 +15,10 @@ void RunningStats::Clear() {
   M1 = M2 = M3 = M4 = 0.0;
 }
 
-void RunningStats::Push(double x) {
-  double delta, delta_n, delta_n2, term1;
+void RunningStats::Push(float x) {
+  float delta, delta_n, delta_n2, term1;
 
-  long long n1 = n;
+  int64_t n1 = n;
   n++;
   delta = x - M1;
   delta_n = delta / n;
@@ -31,28 +31,28 @@ void RunningStats::Push(double x) {
   M2 += term1;
 }
 
-long long RunningStats::NumDataValues() const { return n; }
+int64_t RunningStats::NumDataValues() const { return n; }
 
-double RunningStats::Mean() const { return M1; }
+float RunningStats::Mean() const { return M1; }
 
-double RunningStats::Variance() const { return M2 / (n - 1.0); }
+float RunningStats::Variance() const { return M2 / (n - 1.0); }
 
-double RunningStats::StandardDeviation() const { return sqrt(Variance()); }
+float RunningStats::StandardDeviation() const { return sqrt(Variance()); }
 
-double RunningStats::Skewness() const {
-  return sqrt(double(n)) * M3 / pow(M2, 1.5);
+float RunningStats::Skewness() const {
+  return sqrt(float(n)) * M3 / pow(M2, 1.5);
 }
 
-double RunningStats::Kurtosis() const {
-  return double(n) * M4 / (M2 * M2) - 3.0;
+float RunningStats::Kurtosis() const {
+  return float(n) * M4 / (M2 * M2) - 3.0;
 }
 
-double RunningStats::ConfidenceInterval(ci_t ci) {
+float RunningStats::ConfidenceInterval(ci_t ci) {
   if (n < 300)
     return NAN;
   if (ci < CI90 || ci > CI99)
     return NAN;
-  return z_values[ci] * StandardDeviation() / sqrt((double)n);
+  return z_values[ci] * StandardDeviation() / sqrt((float)n);
 }
 
 RunningStats operator+( RunningStats const &a,  RunningStats const &b) {
@@ -60,10 +60,10 @@ RunningStats operator+( RunningStats const &a,  RunningStats const &b) {
 
   combined.n = a.n + b.n;
 
-  double delta = b.M1 - a.M1;
-  double delta2 = delta * delta;
-  double delta3 = delta * delta2;
-  double delta4 = delta2 * delta2;
+  float delta = b.M1 - a.M1;
+  float delta2 = delta * delta;
+  float delta3 = delta * delta2;
+  float delta4 = delta2 * delta2;
 
   combined.M1 = (a.n * a.M1 + b.n * b.M1) / combined.n;
 
