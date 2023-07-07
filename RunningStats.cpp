@@ -6,7 +6,7 @@
 // 90% 1.645
 // 95% 1.960
 // 99% 2.576
-static float z_values[] = {1.645, 1.960, 2.576};
+static float z_values[] = {1.645f, 1.960f, 2.576f};
 
 RunningStats::RunningStats() { Clear(); }
 
@@ -35,16 +35,16 @@ int64_t RunningStats::NumDataValues() const { return n; }
 
 float RunningStats::Mean() const { return M1; }
 
-float RunningStats::Variance() const { return M2 / (n - 1.0); }
+float RunningStats::Variance() const { return M2 / (n - 1.0f); }
 
 float RunningStats::StandardDeviation() const { return sqrt(Variance()); }
 
 float RunningStats::Skewness() const {
-  return sqrt(float(n)) * M3 / pow(M2, 1.5);
+  return sqrt(float(n)) * M3 / pow(M2, 1.5f);
 }
 
 float RunningStats::Kurtosis() const {
-  return float(n) * M4 / (M2 * M2) - 3.0;
+  return float(n) * M4 / (M2 * M2) - 3.0f;
 }
 
 float RunningStats::ConfidenceInterval(ci_t ci) {
@@ -71,14 +71,14 @@ RunningStats operator+( RunningStats const &a,  RunningStats const &b) {
 
   combined.M3 = a.M3 + b.M3 +
                 delta3 * a.n * b.n * (a.n - b.n) / (combined.n * combined.n);
-  combined.M3 += 3.0 * delta * (a.n * b.M2 - b.n * a.M2) / combined.n;
+  combined.M3 += 3.0f * delta * (a.n * b.M2 - b.n * a.M2) / combined.n;
 
   combined.M4 = a.M4 + b.M4 +
                 delta4 * a.n * b.n * (a.n * a.n - a.n * b.n + b.n * b.n) /
                     (combined.n * combined.n * combined.n);
-  combined.M4 += 6.0 * delta2 * (a.n * a.n * b.M2 + b.n * b.n * a.M2) /
+  combined.M4 += 6.0f * delta2 * (a.n * a.n * b.M2 + b.n * b.n * a.M2) /
                      (combined.n * combined.n) +
-                 4.0 * delta * (a.n * b.M3 - b.n * a.M3) / combined.n;
+                 4.0f * delta * (a.n * b.M3 - b.n * a.M3) / combined.n;
 
   return combined;
 }
